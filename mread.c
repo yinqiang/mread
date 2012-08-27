@@ -148,7 +148,7 @@ mread_create(int port, int max, int buffer_size)
 	my_addr.sin_family = AF_INET;
 	my_addr.sin_port = htons(port);
 	my_addr.sin_addr.s_addr = htonl(INADDR_ANY); // INADDR_LOOPBACK
-	sprintf(stdout, "MREAD bind %s:%u\n", inet_ntoa(my_addr.sin_addr), ntohs(my_addr.sin_port));
+	fprintf(stdout, "MREAD bind %s:%u\n", inet_ntoa(my_addr.sin_addr), ntohs(my_addr.sin_port));
 	if (bind(listen_fd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) == -1)
 	{
 		close(listen_fd);
@@ -393,7 +393,7 @@ mread_poll(struct mread_pool * self, int timeout)
 			int client_fd = accept(self->listen_fd, (struct sockaddr *)&remote_addr,  &len);
 			if (client_fd >= 0)
 			{
-				sprintf(stdout, "MREAD connect %s:%u (fd=%d)\n", inet_ntoa(remote_addr.sin_addr), ntohs(remote_addr.sin_port), client_fd);
+				fprintf(stdout, "MREAD connect %s:%u (fd=%d)\n", inet_ntoa(remote_addr.sin_addr), ntohs(remote_addr.sin_port), client_fd);
 				_add_client(self, client_fd);
 			}
 		}
@@ -436,7 +436,7 @@ mread_close_client(struct mread_pool * self, int id)
 	s->node = NULL;
 	s->temp = NULL;
 	close(s->fd);
-	sprintf(stdout, "MREAD close %d (fd=%d)\n", id, s->fd);
+	fprintf(stdout, "MREAD close %d (fd=%d)\n", id, s->fd);
 
 #ifdef HAVE_EPOLL
 	epoll_ctl(self->epoll_fd, EPOLL_CTL_DEL, s->fd, NULL);
