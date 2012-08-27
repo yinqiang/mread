@@ -6,7 +6,7 @@ struct mread_pool;
 /**
  * 创建一个数据缓冲池
  * @param  port   监听的端口
- * @param  max    最多连接数
+ * @param  max    最大同时连接数
  * @param  buffer 缓冲池大小（传0时会默认创建1M字节的空间）
  * @return 返回缓冲池结构指针
  */
@@ -36,8 +36,8 @@ int mread_poll(struct mread_pool *m , int timeout);
 void * mread_pull(struct mread_pool *m , int size);
 
 /**
- * 当你不需要使用mread_pull返回的数据时，那你必须调用mread_yield
- * 另外，你会在下次调用mread_poll时仍然可以获得这些数据
+ * 当你使用完mread_pull返回的数据时，那你必须调用mread_yield来释放空间
+ * 不然，你会在下次调用mread_poll时这些数据依然会被mread_pull获得
  * @param m 缓冲池结构指针
  */
 void mread_yield(struct mread_pool *m);
